@@ -21,24 +21,24 @@ public class ProcessList {
     private Long housekeeperDelay;
 
     @Getter
-    private final Map<Long, Process> map=new ConcurrentHashMap<>();
+    private final Map<Long, Process> map = new ConcurrentHashMap<>();
 
-    public void processProcesses(){
-        List<Process> processes=mariaDBDriver.getProcessList();
+    public void processProcesses() {
+        List<Process> processes = mariaDBDriver.getProcessList();
         processes.forEach(process -> {
-            if(!map.containsKey(process.getId())){
+            if (!map.containsKey(process.getId())) {
                 process.setStart(Instant.now());
                 map.put(process.getId(), process);
             }
         });
-        List<Long> processesIds=processes.stream().map(Process::getId).collect(Collectors.toList());
+        List<Long> processesIds = processes.stream().map(Process::getId).collect(Collectors.toList());
         map.entrySet().stream()
-                .filter(longProcessEntry -> longProcessEntry.getValue().getStop()==null)
+                .filter(longProcessEntry -> longProcessEntry.getValue().getStop() == null)
                 .filter(longProcessEntry -> !processesIds.contains(longProcessEntry.getKey()))
                 .forEach(longProcessEntry -> longProcessEntry.getValue().setStop(Instant.now()));
     }
 
-    public void housekeeper(){
+    public void housekeeper() {
         map.entrySet().removeIf(longProcessEntry -> longProcessEntry.getValue().getStop().isBefore(Instant.now().minusSeconds(housekeeperDelay)));
     }
 }

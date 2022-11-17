@@ -7,8 +7,6 @@ import ua.com.serverhelp.simplemysqlprocessviwer.entity.Process;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @SpringBootTest
 class MariaDBDriverTest {
     @Autowired

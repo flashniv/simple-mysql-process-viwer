@@ -11,11 +11,8 @@ import ua.com.serverhelp.simplemysqlprocessviwer.driver.MariaDBDriver;
 import ua.com.serverhelp.simplemysqlprocessviwer.entity.Process;
 
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class ProcessListTest {
@@ -26,17 +23,18 @@ class ProcessListTest {
 
     @BeforeEach
     void setUp() {
-        Process process=new Process();
+        processList.getMap().clear();
+        Process process = new Process();
         process.setId(1L);
-        Process process1=new Process();
+        Process process1 = new Process();
         process1.setId(1L);
-        Process process2=new Process();
+        Process process2 = new Process();
         process2.setId(2L);
-        Process process3=new Process();
+        Process process3 = new Process();
         process3.setId(2L);
         Mockito.when(mariaDBDriver.getProcessList())
                 .thenReturn(List.of(process))
-                .thenReturn(List.of(process1,process2))
+                .thenReturn(List.of(process1, process2))
                 .thenReturn(List.of(process3))
                 .thenReturn(List.of());
     }
@@ -77,8 +75,8 @@ class ProcessListTest {
         processList.processProcesses();
         processList.processProcesses();
 
-        Map<Long,Process> processMap=processList.getMap();
-        Process process=processMap.get(1L);
+        Map<Long, Process> processMap = processList.getMap();
+        Process process = processMap.get(1L);
         process.setStop(Instant.MIN);
         processList.housekeeper();
         Assertions.assertEquals(1, processMap.size());

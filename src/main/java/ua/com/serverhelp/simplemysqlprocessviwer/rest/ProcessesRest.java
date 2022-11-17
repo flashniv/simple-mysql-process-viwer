@@ -19,8 +19,8 @@ public class ProcessesRest {
     @Autowired
     private ProcessList processList;
 
-    @RequestMapping(path = "/",method = RequestMethod.GET)
-    public ResponseEntity<List<Process>> getAllProcesses(){
+    @RequestMapping(path = "/", method = RequestMethod.GET)
+    public ResponseEntity<List<Process>> getAllProcesses() {
         return ResponseEntity.ok(new ArrayList<>(processList.getMap().values()));
     }
 }

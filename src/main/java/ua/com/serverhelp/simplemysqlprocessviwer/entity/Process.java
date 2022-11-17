@@ -5,7 +5,7 @@ import lombok.Data;
 import java.time.Instant;
 
 @Data
-public class Process{
+public class Process {
     private Long Id;
     private String User;
     private String Host;
@@ -15,6 +15,6 @@ public class Process{
     private String State;
     private String Info;
     private Double Progress;
-    private Instant start=null;
-    private Instant stop=null;
+    private Instant start = null;
+    private Instant stop = null;
 }
