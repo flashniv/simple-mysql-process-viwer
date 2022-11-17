@@ -29,7 +29,8 @@ public class ProcessList {
     public void processProcesses() {
         List<Process> processes = mariaDBDriver.getProcessList();
         processes.forEach(process -> {
-            if (process.getINFO() != null && process.getINFO().equals("show full processlist")) return;
+            if (process.getINFO() != null && process.getINFO().equals("select * from INFORMATION_SCHEMA.PROCESSLIST")) return;
+            if (process.getCOMMAND().equals("Sleep")) return;
             if (!map.containsKey(process.getQUERY_ID())) {
                 process.setStart(Instant.now());
                 map.put(process.getQUERY_ID(), process);
