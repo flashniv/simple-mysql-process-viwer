@@ -14,6 +14,6 @@ public class MariaDBDriver {
     private JdbcTemplate jdbcTemplate;
 
     public List<Process> getProcessList() {
-        return jdbcTemplate.query("show full processlist", new BeanPropertyRowMapper<>(Process.class));
+        return jdbcTemplate.query("select * from INFORMATION_SCHEMA.PROCESSLIST", new BeanPropertyRowMapper<>(Process.class));
     }
 }

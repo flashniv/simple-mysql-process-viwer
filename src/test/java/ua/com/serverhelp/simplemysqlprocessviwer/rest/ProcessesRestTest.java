@@ -2,7 +2,6 @@ package ua.com.serverhelp.simplemysqlprocessviwer.rest;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,7 +16,7 @@ import ua.com.serverhelp.simplemysqlprocessviwer.driver.MariaDBDriver;
 import ua.com.serverhelp.simplemysqlprocessviwer.entity.Process;
 import ua.com.serverhelp.simplemysqlprocessviwer.service.ProcessList;
 
-import java.util.List;
+import java.time.Instant;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -32,23 +31,15 @@ class ProcessesRestTest {
     @BeforeEach
     void setUp() {
         processList.getMap().clear();
-        Process process = new Process();
-        process.setId(1L);
         Process process1 = new Process();
-        process1.setId(1L);
+        process1.setQUERY_ID(1L);
+        process1.setStart(Instant.now().minusSeconds(3600));
+        process1.setStop(Instant.now());
         Process process2 = new Process();
-        process2.setId(2L);
-        Process process3 = new Process();
-        process3.setId(2L);
-        Mockito.when(mariaDBDriver.getProcessList())
-                .thenReturn(List.of(process))
-                .thenReturn(List.of(process1, process2))
-                .thenReturn(List.of(process3))
-                .thenReturn(List.of());
-        processList.processProcesses();
-        processList.processProcesses();
-        processList.processProcesses();
-        processList.processProcesses();
+        process2.setStart(Instant.now().minusSeconds(600));
+        process2.setStop(Instant.now());
+        processList.getMap().put(1L, process1);
+        processList.getMap().put(2L, process2);
     }
 
     //{"db":null,"start":"2022-11-17T14:06:12.420940Z","stop":"2022-11-17T14:06:12.421139Z","progress":null,"info":null,"id":1,"state":null,"host":null,"time":null,"user":null,"command":null},
@@ -61,7 +52,7 @@ class ProcessesRestTest {
                 )
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().is(200))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.[0].id").isNumber())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.[0].query_ID").isNumber())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.[0].stop").isString());
     }
 }
